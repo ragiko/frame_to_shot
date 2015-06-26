@@ -1,7 +1,7 @@
 module Shot
-    def self.shots
+    def self.shots(path)
         shots = []
-        File.open("./data/all.shot").each_line do |l|
+        File.open(path).each_line do |l|
             a = l.split(" ")
             shots << {
                 video: a[0], 
@@ -16,13 +16,13 @@ module Shot
     def self.result(path)
         res = []
         File.open(path).each_line do |l|
-            a = l.split(",")
+            a = l.delete("\n").split(",")
             a = {
                 video: a[0],
                 parson: a[1],
                 ss: a[2].to_f,
                 es: a[3].to_f,
-                weight: a[4].delete("\n").to_f
+                weight: a[4].to_f
             }
             res << a
         end
@@ -42,7 +42,7 @@ module Shot
     # 候補からshot内の人と重みを選ぶ
     def self.choice_parson_and_weight(candidate_list)
         if candidate_list.size == 0
-            return ""
+            return nil
         end
 
         # フォーマットを変換
